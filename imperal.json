@@ -3582,6 +3582,11 @@
             "default": 0,
             "title": "Requested Count",
             "type": "integer"
+          },
+          "repeated_count": {
+            "default": 0,
+            "title": "Repeated Count",
+            "type": "integer"
           }
         },
         "title": "RepeatJobsResult",
@@ -3895,6 +3900,12 @@
             "description": "Parent folder id. Empty creates a top-level project.",
             "title": "Parent Id",
             "type": "string"
+          },
+          "is_project": {
+            "default": false,
+            "description": "True to create this as a top-level project (only meaningful when parent_id is empty).",
+            "title": "Is Project",
+            "type": "boolean"
           }
         },
         "required": [
@@ -5693,6 +5704,11 @@
           "requested_count": {
             "default": 0,
             "title": "Requested Count",
+            "type": "integer"
+          },
+          "deleted_count": {
+            "default": 0,
+            "title": "Deleted Count",
             "type": "integer"
           }
         },

@@ -76,7 +76,7 @@ def _check_status(resp, action: str):
         )
     if resp.status_code >= 400:
         raise ProviderError(f"Could not {action}: HTTP {resp.status_code}.", resp.status_code)
-    if resp.status_code == 204 or not resp.content:
+    if resp.status_code == 204 or not resp.body:
         return {}
     try:
         return resp.json()
@@ -323,10 +323,12 @@ async def get_folder(ctx, dc, tok, folder_id: str) -> dict:
     return _check_status(resp, "get folder")
 
 
-async def create_folder(ctx, dc, tok, name: str, parent_id: str = "") -> dict:
+async def create_folder(ctx, dc, tok, name: str, parent_id: str = "", is_project: bool = False) -> dict:
     payload = {"name": name}
     if parent_id:
         payload["parent_id"] = parent_id
+    elif is_project:
+        payload["is_project"] = True
     resp = await ctx.http.post(_api(dc, "/folders"), headers=_headers(tok), json=payload)
     return _check_status(resp, "create folder")
 

@@ -761,6 +761,7 @@ async def repeat_workato_jobs(ctx, params: RepeatJobsParams) -> ActionResult:
         return _err(exc)
     return ActionResult.success(
         RepeatJobsResult(id=",".join(params.job_ids), title="Repeat jobs",
+                          requested_count=len(params.job_ids),
                           repeated_count=len(params.job_ids)),
         summary=f"Repeated {len(params.job_ids)} job(s).")
 
@@ -832,7 +833,7 @@ async def create_workato_folder(ctx, params: CreateFolderParams) -> ActionResult
     """Chat function: create workato folder."""
     try:
         tok, dc = await _creds(ctx)
-        data = await wc.create_folder(ctx, dc, tok, params.name, params.parent_id, params.is_project)
+        data = await wc.create_folder(ctx, dc, tok, params.name, params.parent_id, is_project=params.is_project)
     except wc.ProviderError as exc:
         return _err(exc)
     return ActionResult.success(_folder_entity(data), summary=f"Created folder '{params.name}'.",
@@ -1186,8 +1187,12 @@ async def get_workato_lookup_table_row(ctx, params: GetLookupTableRowParams) -> 
 async def add_workato_lookup_table_row(ctx, params: AddLookupTableRowParams) -> ActionResult:
     """Chat function: add workato lookup table row."""
     try:
+        row = json.loads(params.row_json)
+    except Exception:
+        return ActionResult.error("row_json must be valid JSON.", code="WORKATO_BAD_JSON")
+    try:
         tok, dc = await _creds(ctx)
-        data = await wc.add_lookup_table_row(ctx, dc, tok, params.lookup_table_id, params.data)
+        data = await wc.add_lookup_table_row(ctx, dc, tok, params.lookup_table_id, row)
     except wc.ProviderError as exc:
         return _err(exc)
     return ActionResult.success(_lookup_row_entity("row_id", data), summary="Row added.",
@@ -1204,9 +1209,13 @@ async def add_workato_lookup_table_row(ctx, params: AddLookupTableRowParams) -> 
 async def update_workato_lookup_table_row(ctx, params: UpdateLookupTableRowParams) -> ActionResult:
     """Chat function: update workato lookup table row."""
     try:
+        row = json.loads(params.row_json)
+    except Exception:
+        return ActionResult.error("row_json must be valid JSON.", code="WORKATO_BAD_JSON")
+    try:
         tok, dc = await _creds(ctx)
         data = await wc.update_lookup_table_row(ctx, dc, tok, params.lookup_table_id,
-                                                 params.row_id, params.data)
+                                                 params.row_id, row)
     except wc.ProviderError as exc:
         return _err(exc)
     return ActionResult.success(_lookup_row_entity("row_id", data), summary="Row updated.",
@@ -1267,11 +1276,15 @@ async def list_workato_properties(ctx, params: ListPropertiesByPrefixParams) -> 
 async def upsert_workato_properties(ctx, params: UpsertPropertiesParams) -> ActionResult:
     """Chat function: upsert workato properties."""
     try:
+        properties = json.loads(params.properties_json)
+    except Exception:
+        return ActionResult.error("properties_json must be valid JSON.", code="WORKATO_BAD_JSON")
+    try:
         tok, dc = await _creds(ctx)
-        await wc.upsert_properties(ctx, dc, tok, params.properties)
+        await wc.upsert_properties(ctx, dc, tok, properties)
     except wc.ProviderError as exc:
         return _err(exc)
-    entities = [_property_entity(k, str(v)) for k, v in params.properties.items()]
+    entities = [_property_entity(k, str(v)) for k, v in properties.items()]
     return ActionResult.success(WorkatoPropertyList(items=entities),
                                  summary=f"Upserted {len(entities)} propert{'y' if len(entities) == 1 else 'ies'}.")
 

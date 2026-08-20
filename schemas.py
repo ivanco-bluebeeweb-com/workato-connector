@@ -252,6 +252,7 @@ class RepeatJobsResult(sdl.Entity):
     id: str = ""
     title: str = ""
     requested_count: int = 0
+    repeated_count: int = 0
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -283,6 +284,7 @@ class FolderIdParams(BaseModel):
 class CreateFolderParams(BaseModel):
     name: str = Field(..., description="Folder (or project, if parent_id is empty and this becomes top-level) name.")
     parent_id: str = Field("", description="Parent folder id. Empty creates a top-level project.")
+    is_project: bool = Field(False, description="True to create this as a top-level project (only meaningful when parent_id is empty).")
 
 
 class UpdateFolderParams(BaseModel):
@@ -396,6 +398,7 @@ class BatchDeleteResult(sdl.Entity):
     id: str = ""
     title: str = ""
     requested_count: int = 0
+    deleted_count: int = 0
 
 
 class ListLookupTableRowsParams(BaseModel):
