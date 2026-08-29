@@ -134,6 +134,9 @@ async def workato_connect_panel(ctx, **kwargs) -> object:
         ui.Text("Recipes", variant="subtitle"),
         _recipes_section(recipes),
         ui.Divider(),
+        ui.Button("View recipe overview", variant="primary", size="sm", full_width=True,
+                  icon="LayoutDashboard", on_click=ui.Call("__panel__workato_center")),
+        ui.Divider(),
         _settings_button(),
     ])
 
@@ -180,7 +183,25 @@ async def workato_center_panel(ctx, **kwargs) -> object:
     is registered but the Panel app never fetches it at session-init
     without that flag. Text is the shared canonical wording -- must stay
     identical across every app in this situation, not app-specific."""
-    return ui.Empty(
-        message="Nothing to show here -- this app is managed entirely from the sidebar.",
-        icon="👈",
-    )
+    from schemas import ListRecipesParams
+    result = await h.list_workato_recipes(ctx, ListRecipesParams())
+    body: list[ui.UINode] = [ui.Text("Recipe overview", variant="subtitle")]
+    if result.success and result.data and result.data.items:
+        items = result.data.items
+        running = sum(1 for r in items if r.running)
+        body.append(ui.Stats(children=[
+            ui.Stat(label="Total", value=str(len(items))),
+            ui.Stat(label="Running", value=str(running)),
+            ui.Stat(label="Stopped", value=str(len(items) - running)),
+        ]))
+        for r in items[:15]:
+            color = "green" if r.running else "gray"
+            body.append(ui.Stack(direction="h", gap=2, align="center", children=[
+                ui.Badge(label="RUNNING" if r.running else "STOPPED", color=color),
+                ui.Text(r.title or r.name, variant="body"),
+                ui.Text(r.trigger_application, variant="caption"),
+            ]))
+    else:
+        body.append(ui.Text("No recipes found, or not yet connected.", variant="caption"))
+
+    return ui.Stack(direction="v", gap=3, align="stretch", children=body)
