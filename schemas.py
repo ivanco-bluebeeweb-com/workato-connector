@@ -74,6 +74,8 @@ class WorkatoRecipe(sdl.Entity):
 
 
 class WorkatoRecipeList(sdl.EntityList[WorkatoRecipe]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -128,6 +130,8 @@ class WorkatoRecipeVersion(sdl.Entity):
 
 
 class WorkatoRecipeVersionList(sdl.EntityList[WorkatoRecipeVersion]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -165,6 +169,8 @@ class WorkatoConnection(sdl.Entity):
 
 
 class WorkatoConnectionList(sdl.EntityList[WorkatoConnection]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -206,6 +212,8 @@ class PicklistValue(sdl.Entity):
 
 
 class PicklistValueList(sdl.EntityList[PicklistValue]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -236,6 +244,8 @@ class WorkatoJob(sdl.Entity):
 
 
 class WorkatoJobList(sdl.EntityList[WorkatoJob]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -274,6 +284,8 @@ class WorkatoFolder(sdl.Entity):
 
 
 class WorkatoFolderList(sdl.EntityList[WorkatoFolder]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -303,6 +315,8 @@ class WorkatoProject(sdl.Entity):
 
 
 class WorkatoProjectList(sdl.EntityList[WorkatoProject]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -332,6 +346,8 @@ class WorkatoTag(sdl.Entity):
 
 
 class WorkatoTagList(sdl.EntityList[WorkatoTag]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -380,6 +396,8 @@ class WorkatoLookupTable(sdl.Entity):
 
 
 class WorkatoLookupTableList(sdl.EntityList[WorkatoLookupTable]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -415,6 +433,8 @@ class WorkatoLookupTableRow(sdl.Entity):
 
 
 class WorkatoLookupTableRowList(sdl.EntityList[WorkatoLookupTableRow]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -461,6 +481,8 @@ class WorkatoProperty(sdl.Entity):
 
 
 class WorkatoPropertyList(sdl.EntityList[WorkatoProperty]):
+    id: str = ""
+    title: str = ""
     pass
 
 
@@ -499,6 +521,8 @@ class WorkatoAsset(sdl.Entity):
 
 
 class WorkatoAssetList(sdl.EntityList[WorkatoAsset]):
+    id: str = ""
+    title: str = ""
     pass
 
 
