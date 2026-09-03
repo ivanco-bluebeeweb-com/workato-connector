@@ -4,6 +4,9 @@ SKETCH, following n8n Connector's/Make.com Connector's current no-card
 sidebar shape:
   ui.Stack (v, gap=4, align=stretch)
     ui.Header
+    ui.Button("Authorize Workato (OAuth 2.0)", variant="primary", size="sm", icon="login"),
+    ui.Divider(),
+    ui.Text("Or connect via API Client Bearer Token", variant="caption"),
     [not connected] _connect_section() -- plain content, ui.Form(connect_workato)
     [connected]     _connected_section() -- plain text, then recipes list
     ui.Divider()
@@ -44,8 +47,7 @@ def _settings_button() -> ui.UINode:
     """The one required secondary entry point into the settings screen --
     always the last element at the bottom of the sidebar."""
     return ui.Button(
-        "App settings", variant="secondary", size="sm", full_width=True,
-        icon="settings", on_click=ui.Call("__panel__workato_settings"),
+        "App settings", variant="secondary", size="sm", icon="settings", on_click=ui.Call("__panel__workato_settings"),
     )
 
 
@@ -134,8 +136,7 @@ async def workato_connect_panel(ctx, **kwargs) -> object:
         ui.Text("Recipes", variant="subtitle"),
         _recipes_section(recipes),
         ui.Divider(),
-        ui.Button("View recipe overview", variant="primary", size="sm", full_width=True,
-                  icon="LayoutDashboard", on_click=ui.Call("__panel__workato_center")),
+        ui.Button("View recipe overview", variant="primary", size="sm", icon="LayoutDashboard", on_click=ui.Call("__panel__workato_center")),
         ui.Divider(),
         _settings_button(),
     ])
